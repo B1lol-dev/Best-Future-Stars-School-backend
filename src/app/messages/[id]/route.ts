@@ -8,12 +8,32 @@ export async function GET(req: NextRequest, { params }: { params: any }) {
     const message = await Message.findById(params.id);
 
     if (!message) {
-      return NextResponse.json({ message: "Not Found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Not Found" },
+        {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+          },
+        }
+      );
     }
 
     return NextResponse.json(message, { status: 200 });
   } catch (err: any) {
-    return NextResponse.json({ message: "Error " + err.message });
+    return NextResponse.json(
+      { message: "Error " + err.message },
+      {
+        status: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      }
+    );
   }
 }
 
@@ -26,6 +46,16 @@ export async function DELETE(req: NextRequest, { params }: { params: any }) {
       message: deletedMessage,
     });
   } catch (err: any) {
-    return NextResponse.json({ message: "Error " + err.message });
+    return NextResponse.json(
+      { message: "Error " + err.message },
+      {
+        status: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      }
+    );
   }
 }

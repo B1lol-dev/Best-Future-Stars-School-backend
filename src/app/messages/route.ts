@@ -1,16 +1,30 @@
 import connect from "@/lib/db";
 import Message from "@/lib/modals/message";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     await connect();
     const messages = await Message.find();
-    return NextResponse.json(messages, { status: 200 });
+    return new NextResponse(JSON.stringify(messages), {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    });
   } catch (err: any) {
-    return NextResponse.json(
-      { message: "Error fetching users " + err.message },
-      { status: 500 }
+    return new NextResponse(
+      JSON.stringify({ message: "Error fetching users " + err.message }),
+      {
+        status: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      }
     );
   }
 }
@@ -23,7 +37,14 @@ export async function POST(req: Request) {
     await newMessage.save();
     return NextResponse.json(
       { text: "Message is created", message: newMessage },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      }
     );
   } catch (err: any) {
     return NextResponse.json(
@@ -32,6 +53,11 @@ export async function POST(req: Request) {
       },
       {
         status: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
       }
     );
   }
